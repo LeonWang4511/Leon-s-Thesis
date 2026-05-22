@@ -1,19 +1,56 @@
-title: Leon's Thesis - FDM Multi-Modal Monitoring
-description: Complete research history for FDM 3D printing multi-head parameter monitoring + fault detection
-theme: jekyll-theme-cayman
+title: Leon's Thesis
+description: FDM 多模態監測 — 完整研究歷程
+remote_theme: just-the-docs/just-the-docs
 
-# Build settings
+# Color scheme
+color_scheme: light
+
+# Search
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+
+# Aux links (top-right)
+aux_links:
+  "GitHub Repo":
+    - "https://github.com/LeonWang4511/Leon-s-Thesis"
+
+# Footer
+footer_content: "© 2026 LeonWang4511 — FDM Thesis Research History"
+
+# Make all .md files browsable
+nav_sort: case_insensitive
+heading_anchors: true
+
+# Compress
+sass:
+  style: compressed
+
+# Markdown engine
 markdown: kramdown
 kramdown:
   input: GFM
   hard_wrap: false
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
 
-# Show download / source links
-show_downloads: false
-
-# Default layout for all pages
+# Default layout
 defaults:
   - scope:
       path: ""
     values:
       layout: default
+
+# Plugins
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+
+# Exclude
+exclude:
+  - scripts/
+  - tables/legacy_top20_strict_or_cv_splits.csv
+  - README.md
+  - .gitignore
