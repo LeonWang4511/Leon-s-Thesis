@@ -19,18 +19,9 @@ aux_links:
 # Footer
 footer_content: "© 2026 LeonWang4511 — FDM Thesis Research History"
 
-# Make all .md files browsable
+# Nav sort
 nav_sort: case_insensitive
 heading_anchors: true
-
-# Compress
-sass:
-  style: compressed
-  sass_dir: assets/css
-
-# Custom CSS
-custom_css:
-  - assets/css/custom.css
 
 # Markdown engine
 markdown: kramdown
@@ -59,3 +50,5 @@ exclude:
   - tables/legacy_top20_strict_or_cv_splits.csv
   - README.md
   - .gitignore
+  - Gemfile
+  - Gemfile.lock
