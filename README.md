@@ -1,4 +1,4 @@
-# Leon's Thesis — FDM 多模態監測完整研究歷程
+﻿# Leon's Thesis — FDM 多模態監測完整研究歷程
 
 完整 thesis 研究紀錄，包含資料設計、模型演進、實驗指標、shortcut learning 診斷、部署規格等。
 

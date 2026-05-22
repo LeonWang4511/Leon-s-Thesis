@@ -26,6 +26,11 @@ heading_anchors: true
 # Compress
 sass:
   style: compressed
+  sass_dir: assets/css
+
+# Custom CSS
+custom_css:
+  - assets/css/custom.css
 
 # Markdown engine
 markdown: kramdown

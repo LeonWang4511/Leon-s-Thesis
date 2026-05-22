@@ -1,0 +1,55 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// Make all tables horizontally scrollable
+.main-content table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+// Tighter table cells
+.main-content table th,
+.main-content table td {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+// Highlight bold cell values
+.main-content table td strong {
+  color: #5e35b1;
+}
+
+// Code blocks in tables
+.main-content table code {
+  font-size: 0.8rem;
+}
+
+// Better h2/h3 spacing
+.main-content h2 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.3rem;
+  margin-top: 2rem;
+}
+
+// Callout boxes
+.callout {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-left: 4px solid #5e35b1;
+  background: #f3eafc;
+  border-radius: 4px;
+}
+
+.callout.warning {
+  border-left-color: #ef6c00;
+  background: #fff3e0;
+}
+
+.callout.success {
+  border-left-color: #2e7d32;
+  background: #e8f5e9;
+}
