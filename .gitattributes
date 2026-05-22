@@ -1,0 +1,17 @@
+# Force all files to use LF line endings (kramdown table parser breaks on CR)
+* text=auto eol=lf
+
+*.md text eol=lf
+*.html text eol=lf
+*.scss text eol=lf
+*.css text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.csv text eol=lf
+*.py text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary
