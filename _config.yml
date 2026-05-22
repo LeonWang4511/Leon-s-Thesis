@@ -1,0 +1,19 @@
+title: Leon's Thesis - FDM Multi-Modal Monitoring
+description: Complete research history for FDM 3D printing multi-head parameter monitoring + fault detection
+theme: jekyll-theme-cayman
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Show download / source links
+show_downloads: false
+
+# Default layout for all pages
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
