@@ -1,22 +1,21 @@
 <style>
-/* Custom styles for Leon's Thesis - injected via head_custom.html */
+/* Custom styles for Leon's Thesis */
 
-/* Make wide tables scroll horizontally instead of breaking layout */
-.main-content table {
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
+/* Wrap tables in scrollable container without breaking internal layout */
+.main-content > table,
+.main-content > p > table,
+.main-content > div > table {
   max-width: 100%;
 }
 
-/* Tighter table cells */
+/* Tighter font in tables */
 .main-content table th,
 .main-content table td {
-  padding: 0.4rem 0.6rem;
   font-size: 0.88rem;
+  padding: 0.45rem 0.7rem;
 }
 
-/* Bold cells get accent color */
+/* Bold cells get purple accent */
 .main-content table td strong {
   color: #5e35b1;
 }
@@ -24,18 +23,25 @@
 /* Inline code in tables smaller */
 .main-content table code {
   font-size: 0.82rem;
-  padding: 0.1rem 0.3rem;
+  padding: 0.05rem 0.3rem;
 }
 
-/* Better h2 separator */
+/* H2 separator */
 .main-content h2 {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 0.4rem;
   margin-top: 2rem;
 }
 
-/* Star emphasis */
 .main-content h2:first-of-type {
   margin-top: 1rem;
+}
+
+/* For very wide tables, let user scroll horizontally on the page itself.
+   Don't force the table itself to scroll — that breaks just-the-docs layout. */
+.main-content table {
+  display: table;
+  width: 100%;
+  table-layout: auto;
 }
 </style>
