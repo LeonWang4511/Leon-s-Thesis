@@ -1,3 +1,175 @@
+<!-- ═════════════════════════════════════════════════════════
+     Pseudo-password gate (client-side only, NOT real security)
+     ═════════════════════════════════════════════════════════ -->
+<style id="thesis-gate-style">
+  /* Hide all page content until unlocked */
+  html.thesis-locked body > * { display: none !important; }
+  html.thesis-locked body { background: #1a1625; margin: 0; padding: 0; min-height: 100vh; }
+
+  #thesis-gate {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 40%, #8b5cf6 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999999;
+    font-family: 'Inter', 'Noto Sans TC', -apple-system, sans-serif;
+  }
+  #thesis-gate.hidden { display: none !important; }
+  #thesis-gate-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem 2.5rem 2rem;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+  }
+  #thesis-gate-card h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  #thesis-gate-card p {
+    margin: 0.5rem 0 1.5rem;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+  #thesis-gate-input {
+    width: 100%; box-sizing: border-box;
+    padding: 0.9rem 1.1rem;
+    font-size: 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.15em;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  #thesis-gate-input:focus {
+    border-color: #6d28d9;
+    box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+  }
+  #thesis-gate-input.error {
+    border-color: #ef4444;
+    animation: thesis-shake 0.35s;
+  }
+  @keyframes thesis-shake {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-8px); }
+    75%      { transform: translateX(8px); }
+  }
+  #thesis-gate-btn {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+    transition: transform 0.1s, box-shadow 0.2s;
+  }
+  #thesis-gate-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.4);
+  }
+  #thesis-gate-hint {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: #9ca3af;
+  }
+  #thesis-gate-error {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    height: 1.1rem;
+    visibility: hidden;
+  }
+  #thesis-gate-error.visible { visibility: visible; }
+</style>
+<script>
+  // Pre-add lock class IMMEDIATELY to prevent flash of content
+  (function () {
+    var unlocked = false;
+    try { unlocked = sessionStorage.getItem('thesis_unlocked') === '1' ||
+                     localStorage.getItem('thesis_unlocked') === '1'; }
+    catch (e) {}
+    if (!unlocked) document.documentElement.classList.add('thesis-locked');
+  })();
+</script>
+<script defer>
+  (function () {
+    if (!document.documentElement.classList.contains('thesis-locked')) return;
+    var PASSWORD_HASH = '02835086fa7663a5abe9ee2f0d7a0d12c5ec939e97645754e91b6690b0a4d5a3';
+
+    async function sha256Hex(text) {
+      var buf = new TextEncoder().encode(text);
+      var hash = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function buildGate() {
+      var gate = document.createElement('div');
+      gate.id = 'thesis-gate';
+      gate.innerHTML = `
+        <div id="thesis-gate-card">
+          <h1>🔒 Leon's Thesis</h1>
+          <p>請輸入存取碼以瀏覽研究內容</p>
+          <input id="thesis-gate-input" type="password" inputmode="numeric"
+                 autocomplete="off" autofocus placeholder="••••••••" maxlength="32" />
+          <div id="thesis-gate-error">存取碼錯誤</div>
+          <button id="thesis-gate-btn">解鎖</button>
+          <div id="thesis-gate-hint">本網站為私人 thesis 研究紀錄</div>
+        </div>
+      `;
+      document.body.appendChild(gate);
+
+      var input = gate.querySelector('#thesis-gate-input');
+      var btn   = gate.querySelector('#thesis-gate-btn');
+      var err   = gate.querySelector('#thesis-gate-error');
+
+      async function tryUnlock() {
+        var val = input.value.trim();
+        if (!val) return;
+        var h = await sha256Hex(val);
+        if (h === PASSWORD_HASH) {
+          try { sessionStorage.setItem('thesis_unlocked', '1'); } catch (e) {}
+          try { localStorage.setItem('thesis_unlocked', '1'); } catch (e) {}
+          document.documentElement.classList.remove('thesis-locked');
+          gate.classList.add('hidden');
+        } else {
+          input.classList.add('error');
+          err.classList.add('visible');
+          setTimeout(function () {
+            input.classList.remove('error');
+            err.classList.remove('visible');
+          }, 1200);
+          input.select();
+        }
+      }
+      btn.addEventListener('click', tryUnlock);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') tryUnlock();
+      });
+      setTimeout(function () { input.focus(); }, 50);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', buildGate);
+    } else {
+      buildGate();
+    }
+  })();
+</script>
+
 <!-- Google Fonts: Inter (UI/body), Noto Sans TC (Chinese), JetBrains Mono (code) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
